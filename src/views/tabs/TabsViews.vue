@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { Tabbar, TabbarItem } from 'vant'
-import { ref } from 'vue'
-import { RouterView } from 'vue-router'
-const active = ref('')
+import { ref, watch } from 'vue'
+import { RouterView, useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+const active = ref(route.name as string)
+
+watch(active, (newvalue) => {
+  router.push({ name: newvalue })
+})
 </script>
 
 <template>
