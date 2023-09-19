@@ -2,6 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { Tabbar, TabbarItem } from 'vant'
 
 import App from './App.vue'
 import router from './router'
@@ -16,5 +17,7 @@ document.documentElement.style.fontSize = (rootValue * deviceWidth) / rootWidth 
 
 app.use(createPinia())
 app.use(router)
+app.use(Tabbar)
+app.use(TabbarItem)
 //ttt
 app.mount('#app')
