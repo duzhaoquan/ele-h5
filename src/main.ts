@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { Tabbar, TabbarItem, Search } from 'vant'
+import { Tabbar, TabbarItem, Search, Sticky, Icon } from 'vant'
 
 import App from './App.vue'
 import router from './router'
@@ -20,5 +20,7 @@ app.use(router)
 app.use(Tabbar)
 app.use(TabbarItem)
 app.use(Search)
+app.use(Sticky)
+app.use(Icon)
 //ttt
 app.mount('#app')

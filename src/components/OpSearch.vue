@@ -33,12 +33,10 @@ const onkeypress = (e: KeyboardEvent) => {
   <div class="op-search" :class="{ 'op-search--show-action': showAction }" :style="{ background }">
     <div class="op-search__content" :class="shape ? `op-search__content--${shape}` : ''">
       <div class="op-cell op-search__field">
-        //左边的放大镜图片
         <div class="op-field__left-icon">
           <VanIcon name="search"></VanIcon>
         </div>
         <div class="op-cell__value">
-          //输入框
           <div class="op-feild__body">
             <input
               type="search"
@@ -50,7 +48,6 @@ const onkeypress = (e: KeyboardEvent) => {
               @input="(e) => emits('update:mdelValue', (e.target as HTMLInputElement).value)"
             />
           </div>
-          //右边的图标可以自定义,默认为X号
           <div v-if="$slots['right-icon']" class="op-feild__right-icon">
             <slot name="right-icon"></slot>
           </div>
@@ -65,7 +62,7 @@ const onkeypress = (e: KeyboardEvent) => {
     </div>
     <div v-if="showAction" class="op-search__action">
       <slot name="action">
-        //默认插槽内容
+        <!-- //默认插槽内容 -->
         <div @click="emits('cancel')">取消</div>
       </slot>
     </div>
@@ -99,9 +96,9 @@ const onkeypress = (e: KeyboardEvent) => {
     flex: 1;
     padding-left: var(--van-padding-sm);
     background: var(--op-search-content-background);
-    border-radius: var(-van-border--radius-sm);
-    &-round {
-      border-radius: var(-van-radius-max);
+    border-radius: var(--van-border--radius-sm);
+    &--round {
+      border-radius: var(--van-radius-max);
     }
   }
   &__action {
@@ -126,9 +123,25 @@ const onkeypress = (e: KeyboardEvent) => {
     }
   }
 }
+.op-cell {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--van-cell-text-color);
+  font-size: var(--van-cell-font-size);
+  line-height: var(--van-cel-line-height);
+  &__value {
+    display: flex;
+    flex: 1;
+    color: var(--van-cell-text-color);
+    vertical-align: middle;
+    word-wrap: break-word;
+  }
+}
 .op-feild {
   &__body {
     display: flex;
+    flex: 1;
     align-items: center;
   }
 
