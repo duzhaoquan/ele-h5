@@ -12,13 +12,13 @@ interface IEmits {
   (e: 'search', v?: string | number): void
   (e: 'cancel'): void
   (e: 'clear'): void
-  (e: 'update:mdelValue', v?: string): void
+  (e: 'update:modelValue', v?: string): void
   (e: 'inputClick'): void
 }
 const emits = defineEmits<IEmits>()
 
 const onclear = () => {
-  emits('update:mdelValue', '')
+  emits('update:modelValue', '')
   emits('clear')
 }
 const onkeypress = (e: KeyboardEvent) => {
@@ -45,7 +45,7 @@ const onkeypress = (e: KeyboardEvent) => {
               :placeholder="placeholder"
               @keypress="onkeypress"
               @click="emits('inputClick')"
-              @input="(e) => emits('update:mdelValue', (e.target as HTMLInputElement).value)"
+              @input="(e) => emits('update:modelValue', (e.target as HTMLInputElement).value)"
             />
           </div>
           <div v-if="$slots['right-icon']" class="op-feild__right-icon">
@@ -159,7 +159,7 @@ const onkeypress = (e: KeyboardEvent) => {
     resize: none;
     user-select: none;
     &::placeholder {
-      color: var(--van-feild-input-placeholder-color);
+      color: var(--van-field-placeholder-text-color);
     }
   }
   &__right-icon {
