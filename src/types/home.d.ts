@@ -10,7 +10,7 @@ export interface ISearchResult {
 }
 
 export interface ISearchResultList {
-  list: ISearchResult
+  list: ISearchResult[]
 }
 export interface IHomeInfo {
   banner: IBanner[]

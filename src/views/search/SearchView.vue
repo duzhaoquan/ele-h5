@@ -2,6 +2,8 @@
 import OpSearch from '@/components/OpSearch.vue'
 import { computed, ref } from 'vue'
 import { useToggle } from '@/use/useToggle'
+import type { ISearchResult } from '@/types'
+import { fetchSearchData } from '@/api/search'
 
 interface IEmits {
   (e: 'toggleShowSearchView'): void
@@ -21,21 +23,30 @@ const HISTORY_TAGS = [
   '水果',
 ]
 const [isHistoryTagShow, toggleHistoryTag] = useToggle(false)
-
+const [INNT, DONE, DOING] = [-1, 0, 1]
+const searchState = ref(INNT)
+const searchReult = ref([] as ISearchResult[])
 const historyTags = computed(() =>
   isHistoryTagShow.value ? HISTORY_TAGS : HISTORY_TAGS.slice(0, 5),
 )
 
 const searchValue = ref('')
 
-const onsSearch = () => {
+const onsSearch = async (v?: string | number) => {
   // eslint-disable-next-line no-console
   console.log('onsSearch')
+  try {
+    searchState.value = DOING
+    const { list } = await fetchSearchData(v as string)
+    searchReult.value = list
+  } finally {
+    searchState.value = DONE
+  }
 }
 
 const onTagClick = (v: string) => {
   searchValue.value = v
-  onsSearch()
+  onsSearch(v)
 }
 </script>
 
@@ -58,6 +69,18 @@ const onTagClick = (v: string) => {
         <VanIcon v-if="isHistoryTagShow" name="arrow-up"></VanIcon>
         <VanIcon v-else name="arrow-down"></VanIcon>
       </div>
+    </div>
+
+    <div class="search-view__result">
+      <div class="searching" v-if="searchState === DOING">~正在搜索~</div>
+      <template v-if="searchState === DONE">
+        <div class="result-item" v-for="v in searchReult" :key="v.label">
+          <VanIcon name="search"></VanIcon>
+          <div class="name">约{{ v.label }}</div>
+          <div class="count">{{ v.resultCount }}</div>
+        </div>
+        <div class="no-reslut">~暂无推荐~</div>
+      </template>
     </div>
   </div>
 </template>
@@ -88,5 +111,39 @@ const onTagClick = (v: string) => {
       margin-bottom: var(--van-padding-xs);
     }
   }
+
+  &__result {
+    .result-item {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      padding: 10px;
+      border-radius: 1px solid var(--van-gray-1);
+      .name {
+        flex: 1;
+        padding-left: 6px;
+      }
+      .count {
+        font-size: 12px;
+        color: var(--van-gray-6);
+      }
+    }
+    .searching,
+    .no-reslut {
+      font-size: 12px;
+      color: var(--van-gray-6);
+      padding: 100px 0;
+      text-align: center;
+    }
+  }
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s ease;
+}
+.list-enter-from,
+.list-leae-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
