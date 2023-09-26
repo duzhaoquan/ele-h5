@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import { useToggle } from '@/use/useToggle'
 import type { ISearchResult } from '@/types'
 import { fetchSearchData } from '@/api/search'
+import { Search } from 'vant'
 
 interface IEmits {
   (e: 'toggleShowSearchView'): void
@@ -25,20 +26,18 @@ const HISTORY_TAGS = [
 const [isHistoryTagShow, toggleHistoryTag] = useToggle(false)
 const [INNT, DONE, DOING] = [-1, 0, 1]
 const searchState = ref(INNT)
-const searchReult = ref([] as ISearchResult[])
+const searchResult = ref([] as ISearchResult[])
 const historyTags = computed(() =>
   isHistoryTagShow.value ? HISTORY_TAGS : HISTORY_TAGS.slice(0, 5),
 )
 
 const searchValue = ref('')
 
-const onsSearch = async (v?: string | number) => {
-  // eslint-disable-next-line no-console
-  console.log('onsSearch')
+const onSearch = async (v?: string | number) => {
   try {
     searchState.value = DOING
     const { list } = await fetchSearchData(v as string)
-    searchReult.value = list
+    searchResult.value = list
   } finally {
     searchState.value = DONE
   }
@@ -46,7 +45,7 @@ const onsSearch = async (v?: string | number) => {
 
 const onTagClick = (v: string) => {
   searchValue.value = v
-  onsSearch(v)
+  onSearch(v)
 }
 </script>
 
@@ -57,7 +56,7 @@ const onTagClick = (v: string) => {
       shape="round"
       v-model="searchValue"
       placeholder="请输入搜索关键词"
-      @search="onsSearch"
+      @search="onSearch"
       @cancel="emits('toggleShowSearchView')"
     ></OpSearch>
     <div class="search-view__history" v-if="!searchValue">
@@ -74,12 +73,12 @@ const onTagClick = (v: string) => {
     <div class="search-view__result">
       <div class="searching" v-if="searchState === DOING">~正在搜索~</div>
       <template v-if="searchState === DONE">
-        <div class="result-item" v-for="v in searchReult" :key="v.label">
+        <div class="result-item" v-for="v in searchResult" :key="v.label">
           <VanIcon name="search"></VanIcon>
-          <div class="name">约{{ v.label }}</div>
-          <div class="count">{{ v.resultCount }}</div>
+          <div class="name">{{ v.label }}</div>
+          <div class="count">约{{ v.resultCount }}个结果</div>
         </div>
-        <div class="no-reslut">~暂无推荐~</div>
+        <div class="no-reslut" v-if="!searchResult.length">~暂无推荐~</div>
       </template>
     </div>
   </div>
