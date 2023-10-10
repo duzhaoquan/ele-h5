@@ -27,6 +27,7 @@ export interface IBanner {
 
 export interface ITransformer {
   imgUrl: string
+  label: string
 }
 
 export interface IScrollBarInfo {

@@ -6,6 +6,8 @@ import OpLoadingView from '@/components/OpLoadingView.vue'
 import { fetchHomePageData } from '@/api/home'
 import { useAsync } from '@/use/useAsync'
 import type { ICountdown, IHomeInfo } from '@/types'
+import TheTransformer from './components/TheTransformer.vue'
+
 const [isShowSearchView, toggleSearchView] = useToggle(false)
 const recomments = [
   {
@@ -28,14 +30,16 @@ const { data, pending } = useAsync(fetchHomePageData, {
 </script>
 
 <template>
-  <Transition>
-    <SearchView v-if="isShowSearchView" @toggle-show-search-view="toggleSearchView"></SearchView>
-  </Transition>
-  <div v-show="!isShowSearchView">
-    <TheTop :recomments="recomments" @search-click="toggleSearchView"></TheTop>
-    <OpLoadingView :loading="pending" type="loading">
-      {{ data }}
-    </OpLoadingView>
+  <div class="home-page">
+    <Transition>
+      <SearchView v-if="isShowSearchView" @toggle-show-search-view="toggleSearchView"></SearchView>
+    </Transition>
+    <div v-show="!isShowSearchView">
+      <TheTop :recomments="recomments" @search-click="toggleSearchView"></TheTop>
+      <OpLoadingView :loading="pending" type="loading">
+        <TheTransformer :data="data.transformer"></TheTransformer>
+      </OpLoadingView>
+    </div>
   </div>
 </template>
 
