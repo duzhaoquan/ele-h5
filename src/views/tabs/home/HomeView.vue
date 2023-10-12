@@ -7,6 +7,7 @@ import { fetchHomePageData } from '@/api/home'
 import { useAsync } from '@/use/useAsync'
 import type { ICountdown, IHomeInfo } from '@/types'
 import TheTransformer from './components/TheTransformer.vue'
+import ScrollBar from './components/ScrollBar.vue'
 
 const [isShowSearchView, toggleSearchView] = useToggle(false)
 const recomments = [
@@ -38,6 +39,7 @@ const { data, pending } = useAsync(fetchHomePageData, {
       <TheTop :recomments="recomments" @search-click="toggleSearchView"></TheTop>
       <OpLoadingView :loading="pending" type="loading">
         <TheTransformer :data="data.transformer"></TheTransformer>
+        <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
       </OpLoadingView>
     </div>
   </div>
