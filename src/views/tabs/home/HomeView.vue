@@ -38,6 +38,9 @@ const { data, pending } = useAsync(fetchHomePageData, {
     <div v-show="!isShowSearchView">
       <TheTop :recomments="recomments" @search-click="toggleSearchView"></TheTop>
       <OpLoadingView :loading="pending" type="loading">
+        <div class="home-page__banner">
+          <img v-for="v in data.banner" :key="v.imgUrl" :src="v.imgUrl" />
+        </div>
         <TheTransformer :data="data.transformer"></TheTransformer>
         <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
       </OpLoadingView>
@@ -46,7 +49,42 @@ const { data, pending } = useAsync(fetchHomePageData, {
 </template>
 
 <style>
-.test {
-  font-size: 39px;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.home-page {
+  background: var(--op-gray-bg-color);
+  padding-bottom: 70px;
+
+  &__banner {
+    img {
+      width: 100%;
+      padding-top: 10px;
+      background: white;
+      padding-bottom: 100px;
+    }
+  }
+  &__activity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+
+    &__swipe {
+      border-radius: 8px;
+      width: 180px;
+      height: 170px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
 }
 </style>
