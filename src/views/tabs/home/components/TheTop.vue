@@ -16,7 +16,7 @@ const emits = defineEmits<IEmits>()
   <div class="home-top">
     <div class="top">
       <img class="location-icon" src="@/assets/imgs/index_page/location.png" />
-      <dev class="location"> 幸福小区（北一区南门）</dev>
+      <div class="location">幸福小区（北一区南门）</div>
       <img class="shopcart-icon" src="@/assets/imgs/index_page/shopcart.png" />
       <img class="comments-icon" src="@/assets/imgs/index_page/comments.png" />
     </div>

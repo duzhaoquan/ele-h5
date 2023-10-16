@@ -8,6 +8,7 @@ import { useAsync } from '@/use/useAsync'
 import type { ICountdown, IHomeInfo } from '@/types'
 import TheTransformer from './components/TheTransformer.vue'
 import ScrollBar from './components/ScrollBar.vue'
+import CountDown from './components/CountDown.vue'
 
 const [isShowSearchView, toggleSearchView] = useToggle(false)
 const recomments = [
@@ -43,12 +44,15 @@ const { data, pending } = useAsync(fetchHomePageData, {
         </div>
         <TheTransformer :data="data.transformer"></TheTransformer>
         <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
+        <div class="home-page__acctivity">
+          <CountDown :data="data.countdown"></CountDown>
+        </div>
       </OpLoadingView>
     </div>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -67,7 +71,6 @@ const { data, pending } = useAsync(fetchHomePageData, {
       width: 100%;
       padding-top: 10px;
       background: white;
-      padding-bottom: 100px;
     }
   }
   &__activity {
