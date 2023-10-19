@@ -9,6 +9,8 @@ import type { ICountdown, IHomeInfo } from '@/types'
 import TheTransformer from './components/TheTransformer.vue'
 import ScrollBar from './components/ScrollBar.vue'
 import CountDown from './components/CountDown.vue'
+import OpSwipe from '@/components/swipe/OpSwipe'
+import OpSwipeItem from '@/components/swipe/OpSwipeItem'
 
 const [isShowSearchView, toggleSearchView] = useToggle(false)
 const recomments = [
@@ -44,8 +46,14 @@ const { data, pending } = useAsync(fetchHomePageData, {
         </div>
         <TheTransformer :data="data.transformer"></TheTransformer>
         <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
-        <div class="home-page__acctivity">
+        <div class="home-page__activity">
           <CountDown :data="data.countdown"></CountDown>
+          <OpSwipe class="home-pag__activity__swipe" :autoplay="3000" :loop="1000">
+            <div>hhhhhhhhh</div>
+            <OpSwipeItem v-for="v in data.activities" :key="v">
+              <img :src="v" />
+            </OpSwipeItem>
+          </OpSwipe>
         </div>
       </OpLoadingView>
     </div>

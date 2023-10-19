@@ -2,13 +2,13 @@ import type { InjectionKey } from 'vue'
 import type { Child } from './useChildren'
 import { inject, getCurrentInstance, onUnmounted } from 'vue'
 
-export type ParentProvide<T> = {
+export type ParentProvide = {
   link(instance: Child): void
   unlink(instance: Child): void
-  child: T
+  [key: string]: any
 }
 
-export function useParent<T>(key: InjectionKey<ParentProvide<T>>) {
+export function useParent(key: InjectionKey<ParentProvide>) {
   //为子组件注入父组件提供的属性
   const parent = inject(key, null)
 
