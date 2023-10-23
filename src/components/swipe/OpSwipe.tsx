@@ -1,8 +1,9 @@
-import { useChildren } from '@/use/useChildren'
+import { useChildren, type Child, type NotNullChild } from '@/use/useChildren'
 import { doubleRaf } from '@/utils/raf'
 import { clamp, createNamespace } from 'vant/lib/utils'
-import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount, Ref } from 'vue'
 import './OpSwipe.scss'
+import OpSwipeItem from './OpSwipeItem'
 
 const [name, bem] = createNamespace('swipe')
 
@@ -29,8 +30,8 @@ export default defineComponent({
       default: 0,
     },
     loop: {
-      type: Number,
-      default: 0,
+      type: Boolean,
+      default: true,
     },
     showIndicators: {
       type: Boolean,
@@ -57,7 +58,7 @@ export default defineComponent({
     const count = computed(() => children.length)
     const size = computed(() => state[props.valtical ? 'height' : 'width'])
     const trackSize = computed(() => count.value * size.value)
-
+    // const firstChild = computed(() => track.value.children[0])
     const trackStyle = computed(() => {
       const mainAxis = props.valtical ? 'height' : 'width'
       const style = {
@@ -72,9 +73,9 @@ export default defineComponent({
       const active = state.active
       if (pace) {
         if (props.loop) {
-          return clamp(active, -1, count.value)
+          return clamp(active + pace, -1, count.value)
         } else {
-          return clamp(active, 0, count.value - 1)
+          return clamp(active + pace, 0, count.value - 1)
         }
       }
       return active
@@ -92,32 +93,41 @@ export default defineComponent({
       return 0
     })
     const move = ({ pace = 0, offset = 0 }) => {
-      if (count.value <= 1) {
+      if (count.value > 1) {
         const targetActive = getTargetActive(pace)
-        const targetOffset = getTargetOffset(pace, offset)
+        const targetOffset = getTargetOffset(targetActive, offset)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-        if (props.loop) {
-          if (children[0] && targetOffset !== minOffset.value) {
-            const outRightBound = targetOffset < minOffset.value
-            if (outRightBound) {
-              children[0].setOffset(trackSize.value)
-            }
-          }
-          if (children[count.value - 1] && targetOffset !== 0) {
-            const outLeftBound = targetOffset > 0
-            if (outLeftBound) {
-              children[count.value - 1]?.setOffset(-trackSize.value)
-            }
-          }
-        }
+        // if (props.loop) {
+        //   if (targetOffset !== minOffset.value) {
+        //     const outRightBound = targetOffset < minOffset.value
+        //     if (outRightBound) {
+        //       firstChild.value.style.transform = `translate${props.valtical ? 'Y' : 'X'}(${
+        //         trackSize.value
+        //       }px)`
+        //     } else {
+        //       firstChild.value.style.transform = `translate${props.valtical ? 'Y' : 'X'}(0px)`
+        //     }
+        //   }
+        // if (children[count.value - 1] && targetOffset !== 0) {
+        //   const outLeftBound = targetOffset > 0
+        //   if (outLeftBound) {
+        //     children[count.value - 1]?.setOffset(-trackSize.value)
+        //   }
+        // }
+        // }
 
         state.active = targetActive
         state.offset = targetOffset //改变offset触发滚动
-        return
       }
     }
     const correctPositon = () => {
       state.swiping = true
+      if (state.active < 0) {
+        move({ pace: count.value })
+      } else if (state.active >= count.value) {
+        move({ pace: -count.value })
+      }
     }
 
     const next = () => {
@@ -164,7 +174,7 @@ export default defineComponent({
     return () => (
       <div ref={root} class={bem()}>
         <div ref={track} style={trackStyle.value} class={bem('track')}>
-          {slots.defalut?.()}
+          {slots.default?.()}
         </div>
       </div>
     )

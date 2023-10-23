@@ -15,7 +15,7 @@ export function createBEM(name: string) {
   }
 }
 
-export function createNamespaceDQ(name: string) {
+export function createNamespace(name: string) {
   const preName = `op-${name}`
   return [preName, createBEM(preName)] as const
 }

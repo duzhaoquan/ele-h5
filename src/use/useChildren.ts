@@ -1,4 +1,4 @@
-import type { ComponentInternalInstance, InjectionKey } from 'vue'
+import type { ComponentInternalInstance, InjectionKey, Ref } from 'vue'
 import type { ParentProvide } from './useParent'
 import { reactive, provide } from 'vue'
 
@@ -10,7 +10,6 @@ export function useChildren(key: InjectionKey<ParentProvide>) {
 
   const linkChildren = (value?: any) => {
     const link = (child: Child) => {
-      children.push(child)
       children.push(child)
     }
 

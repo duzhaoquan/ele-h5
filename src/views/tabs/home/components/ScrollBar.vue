@@ -31,10 +31,11 @@ onMounted(() => {
       // 如果超过 item 个数就需要将第一个元素接到后面
       firstSwipeItem.style.transform = `translateY(${props.height * count}px)`
       // 第一个元素滚动动画结束之后，将整个 container 位置重置
-      useTimeout(() => {
+      const timeout = setTimeout(() => {
         container.style.transition = ''
         firstSwipeItem.style.transform = ''
         container.style.transform = ''
+        clearTimeout(timeout)
       }, props.transitionTime)
     }
     container.style.transform = `translateY(-${index * props.height}px)`

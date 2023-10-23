@@ -13,6 +13,6 @@ export const cancelRaf =
 
 export const doubleRaf = (fn: () => void) => {
   rAF(() => {
-    fn
+    rAF(fn)
   })
 }
