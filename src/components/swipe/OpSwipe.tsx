@@ -58,7 +58,8 @@ export default defineComponent({
     const count = computed(() => children.length)
     const size = computed(() => state[props.valtical ? 'height' : 'width'])
     const trackSize = computed(() => count.value * size.value)
-    // const firstChild = computed(() => track.value.children[0])
+    const firstChild = computed(() => track.value.children[0])
+    const lastChild = computed(() => track.value.children[count.value - 1])
     const trackStyle = computed(() => {
       const mainAxis = props.valtical ? 'height' : 'width'
       const style = {
@@ -98,24 +99,41 @@ export default defineComponent({
         const targetOffset = getTargetOffset(targetActive, offset)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-        // if (props.loop) {
-        //   if (targetOffset !== minOffset.value) {
-        //     const outRightBound = targetOffset < minOffset.value
-        //     if (outRightBound) {
-        //       firstChild.value.style.transform = `translate${props.valtical ? 'Y' : 'X'}(${
-        //         trackSize.value
-        //       }px)`
-        //     } else {
-        //       firstChild.value.style.transform = `translate${props.valtical ? 'Y' : 'X'}(0px)`
-        //     }
-        //   }
-        // if (children[count.value - 1] && targetOffset !== 0) {
-        //   const outLeftBound = targetOffset > 0
-        //   if (outLeftBound) {
-        //     children[count.value - 1]?.setOffset(-trackSize.value)
-        //   }
-        // }
-        // }
+        if (props.loop) {
+          if (targetOffset !== minOffset.value) {
+            const outRightBound = targetOffset < minOffset.value
+
+            if (props.valtical) {
+              if (outRightBound) {
+                firstChild.value.style.transform = `translateY(${trackSize.value}px)`
+              } else {
+                firstChild.value.style.transform = `translateY(0px)`
+              }
+            } else {
+              if (outRightBound) {
+                firstChild.value.style.transform = `translateX(${trackSize.value}px)`
+              } else {
+                firstChild.value.style.transform = `translateX(0px)`
+              }
+            }
+          }
+          if (targetOffset !== 0) {
+            const outLeftBound = targetOffset > 0
+            if (props.valtical) {
+              if (outLeftBound) {
+                lastChild.value.style.transform = `translateY(${-trackSize.value}px)`
+              } else {
+                lastChild.value.style.transform = `translateY(0px)`
+              }
+            } else {
+              if (outLeftBound) {
+                lastChild.value.style.transform = `translateX(${-trackSize.value}px)`
+              } else {
+                lastChild.value.style.transform = `translateX(0px)`
+              }
+            }
+          }
+        }
 
         state.active = targetActive
         state.offset = targetOffset //改变offset触发滚动

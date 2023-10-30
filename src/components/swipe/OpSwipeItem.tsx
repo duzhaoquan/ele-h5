@@ -41,7 +41,7 @@ export default defineComponent({
 
     return () => (
       <div class={bem()} style={style.value}>
-        {slots.defalut?.()}
+        {slots.default?.()}
       </div>
     )
   },
