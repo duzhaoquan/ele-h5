@@ -4,6 +4,7 @@ import { clamp, createNamespace } from 'vant/lib/utils'
 import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount, Ref } from 'vue'
 import './OpSwipe.scss'
 import OpSwipeItem from './OpSwipeItem'
+import { useTouch } from '@/use/useTouch'
 
 const [name, bem] = createNamespace('swipe')
 
@@ -27,7 +28,7 @@ export default defineComponent({
     },
     duration: {
       type: Number,
-      default: 0,
+      default: 1000,
     },
     loop: {
       type: Boolean,
@@ -37,7 +38,7 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
-    valtical: {
+    vertical: {
       type: Boolean,
       defalut: false,
     },
@@ -56,15 +57,15 @@ export default defineComponent({
 
     const { children, linkChildren } = useChildren(SWIPE_KEY)
     const count = computed(() => children.length)
-    const size = computed(() => state[props.valtical ? 'height' : 'width'])
+    const size = computed(() => state[props.vertical ? 'height' : 'width'])
     const trackSize = computed(() => count.value * size.value)
     const firstChild = computed(() => track.value.children[0])
     const lastChild = computed(() => track.value.children[count.value - 1])
     const trackStyle = computed(() => {
-      const mainAxis = props.valtical ? 'height' : 'width'
+      const mainAxis = props.vertical ? 'height' : 'width'
       const style = {
-        transform: `translate${props.valtical ? 'Y' : 'X'}(${state.offset}px)`,
-        transitionDurantion: `${state.swiping ? 0 : props.duration}ms`,
+        transform: `translate${props.vertical ? 'Y' : 'X'}(${state.offset}px)`,
+        transitionDuration: `${state.swiping ? 0 : props.duration}ms`,
         [mainAxis]: `${trackSize.value}px`,
       }
       return style
@@ -88,7 +89,7 @@ export default defineComponent({
     }
     const minOffset = computed(() => {
       if (state.rect) {
-        const base = props.valtical ? state.rect.height : state.rect.width
+        const base = props.vertical ? state.rect.height : state.rect.width
         return base - trackSize.value
       }
       return 0
@@ -102,8 +103,7 @@ export default defineComponent({
         if (props.loop) {
           if (targetOffset !== minOffset.value) {
             const outRightBound = targetOffset < minOffset.value
-
-            if (props.valtical) {
+            if (props.vertical) {
               if (outRightBound) {
                 firstChild.value.style.transform = `translateY(${trackSize.value}px)`
               } else {
@@ -119,7 +119,7 @@ export default defineComponent({
           }
           if (targetOffset !== 0) {
             const outLeftBound = targetOffset > 0
-            if (props.valtical) {
+            if (props.vertical) {
               if (outLeftBound) {
                 lastChild.value.style.transform = `translateY(${-trackSize.value}px)`
               } else {
@@ -182,6 +182,42 @@ export default defineComponent({
       state.height = rect.height
       autoplay()
     }
+    const touch = useTouch()
+    const delta = computed(() => (props.vertical ? touch.deltaY.value : touch.deltaX.value))
+    let touchStartTime: number
+    const onTouchStart = (evevt: TouchEvent) => {
+      touch.start(evevt)
+      touchStartTime = Date.now()
+
+      stopAutoplay()
+      correctPositon()
+    }
+    const onTouchMove = (event: TouchEvent) => {
+      touch.move(event)
+
+      event.preventDefault()
+      move({ offset: delta.value })
+    }
+    const onTouchEnd = () => {
+      const duration = Date.now() - touchStartTime
+      const speed = delta.value / duration
+      const shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(delta.value) > size.value / 2
+      if (shouldSwipe) {
+        const offset = props.vertical ? touch.offsetY.value : touch.offsetX.value
+        let pace = 0
+        if (props.loop) {
+          pace = offset > 0 ? (delta.value > 0 ? -1 : 1) : 0
+        } else {
+          pace = -Math[delta.value > 0 ? 'ceil' : 'floor'](delta.value / size.value)
+        }
+        move({ pace: pace })
+      } else {
+        move({ pace: 0 })
+      }
+
+      state.swiping = false
+      autoplay()
+    }
 
     linkChildren({
       size,
@@ -191,7 +227,14 @@ export default defineComponent({
     onBeforeUnmount(stopAutoplay)
     return () => (
       <div ref={root} class={bem()}>
-        <div ref={track} style={trackStyle.value} class={bem('track')}>
+        <div
+          ref={track}
+          style={trackStyle.value}
+          class={bem('track')}
+          onTouchstart={onTouchStart}
+          onTouchmove={onTouchMove}
+          onTouchend={onTouchEnd}
+        >
           {slots.default?.()}
         </div>
       </div>

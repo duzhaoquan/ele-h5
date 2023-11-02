@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-
+//垂直和水平，哪个方向移动距离大算哪个
 const getDirection = (x: number, y: number) => {
   if (x > y) {
     return 'horizontal'
@@ -13,8 +13,10 @@ const getDirection = (x: number, y: number) => {
 export function useTouch() {
   const startX = ref(0)
   const startY = ref(0)
+  //移动的水平距离（有正负）
   const deltaX = ref(0)
   const deltaY = ref(0)
+  //距离绝对值
   const offsetX = ref(0)
   const offsetY = ref(0)
   const direction = ref('')
