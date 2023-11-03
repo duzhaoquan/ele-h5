@@ -219,6 +219,17 @@ export default defineComponent({
       autoplay()
     }
 
+    const activeIndicator = computed(() => state.active % count.value)
+    const renderDot = (_: string, index: number) => {
+      const active = index === activeIndicator.value
+      return <i class={bem('indicator', { active })}> </i>
+    }
+    const renderIndicator = () => {
+      if (props.showIndicators) {
+        return <div class={bem('indicators')}>{Array(count.value).fill('').map(renderDot)}</div>
+      }
+    }
+
     linkChildren({
       size,
       props,
@@ -237,6 +248,7 @@ export default defineComponent({
         >
           {slots.default?.()}
         </div>
+        {renderIndicator()}
       </div>
     )
   },
