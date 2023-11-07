@@ -11,7 +11,9 @@ import ScrollBar from './components/ScrollBar.vue'
 import CountDown from './components/CountDown.vue'
 import OpSwipe from '@/components/swipe/OpSwipe'
 import OpSwipeItem from '@/components/swipe/OpSwipeItem'
-
+import { PRIMARY_COLOR, TRANSPARENT } from '@/config'
+import { ref } from 'vue'
+import { HOME_TABS } from './config'
 const [isShowSearchView, toggleSearchView] = useToggle(false)
 const recomments = [
   {
@@ -31,6 +33,10 @@ const { data, pending } = useAsync(fetchHomePageData, {
   countdown: {} as ICountdown,
   activities: [],
 } as IHomeInfo)
+const tabBackgruondColor = ref(TRANSPARENT)
+const onTabScroll = ({ isFixed }: { isFixed: boolean }) => {
+  tabBackgruondColor.value = isFixed ? 'white' : TRANSPARENT
+}
 </script>
 
 <template>
@@ -54,6 +60,17 @@ const { data, pending } = useAsync(fetchHomePageData, {
             </OpSwipeItem>
           </OpSwipe>
         </div>
+        <VanTabs
+          sticky
+          offset-top="54px"
+          :color="PRIMARY_COLOR"
+          :background="tabBackgruondColor"
+          @scroll="onTabScroll"
+        >
+          <VanTab v-for="v in HOME_TABS" :key="v.title" :title="v.title">
+            <component :is="v.component"></component>
+          </VanTab>
+        </VanTabs>
       </OpLoadingView>
     </div>
   </div>
