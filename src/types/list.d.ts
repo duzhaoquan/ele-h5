@@ -5,5 +5,5 @@ export interface Ipaginate {
 
 export interface IList<T> {
   data: T[]
-  toal: number
+  total: number
 }
