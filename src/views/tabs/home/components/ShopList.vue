@@ -30,7 +30,7 @@ const onLoad = async () => {
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <ShopItem v-for="v in shoplist" :key="v.id">{{ v.shopName }}</ShopItem>
+      <ShopItem v-for="v in shoplist" :key="v.id" :data="v">{{ v.shopName }}</ShopItem>
     </OpList>
   </div>
 </template>
