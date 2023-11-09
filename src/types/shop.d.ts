@@ -6,7 +6,7 @@ export interface IService {
 export interface IActivity {
   type: number
   tips?: string
-  info?: string[]
+  infos?: string[]
 }
 
 export interface IShop {
@@ -20,6 +20,9 @@ export interface IShop {
   deliveryTime: string
   id: string
   monthlyCount: number
+  postUrl: string
+  bgUrl: string
+  score: number
   services: IService[]
   shopName: string
   tops: string[]

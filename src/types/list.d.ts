@@ -1,4 +1,4 @@
-export interface Ipaginate {
+export interface IPaginate {
   _page: number
   _limit: number
 }

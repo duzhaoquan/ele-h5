@@ -4,6 +4,8 @@ import { createNamespace } from '@/utils/create'
 import { defineComponent, onMounted, onUpdated, ref } from 'vue'
 import { Loading as Vanloading } from 'vant'
 import './OpList.scss'
+import { nextTick } from 'vue'
+import { useEventListener } from '@/use/useEventListener'
 
 const [name, bem] = createNamespace('list')
 export default defineComponent({
@@ -37,26 +39,28 @@ export default defineComponent({
     const scrollParent = useScrollParent(root)
 
     const check = () => {
-      if (loading.value || props.finished) {
-        return
-      }
-      const scrollParentRect = useRect(scrollParent)
-      if (scrollParentRect.height <= 0) {
-        return
-      }
-      const placeholderRect = useRect(placeholder)
+      nextTick(() => {
+        if (loading.value || props.finished) {
+          return
+        }
+        const scrollParentRect = useRect(scrollParent)
+        if (scrollParentRect.height <= 0) {
+          return
+        }
+        const placeholderRect = useRect(placeholder)
 
-      let isRechEdge = false
-      if (props.direction === 'up') {
-        isRechEdge = scrollParentRect.top - placeholderRect.top <= props.offset
-      } else {
-        isRechEdge = placeholderRect.bottom - scrollParentRect.bottom <= props.offset
-      }
-      if (isRechEdge) {
-        loading.value = true
-        emit('update:loading', true)
-        emit('load')
-      }
+        let isRechEdge = false
+        if (props.direction === 'up') {
+          isRechEdge = scrollParentRect.top - placeholderRect.top <= props.offset
+        } else {
+          isRechEdge = placeholderRect.bottom - scrollParentRect.bottom <= props.offset
+        }
+        if (isRechEdge) {
+          loading.value = true
+          emit('update:loading', true)
+          emit('load')
+        }
+      })
     }
 
     onMounted(() => {
@@ -64,6 +68,10 @@ export default defineComponent({
     })
     onUpdated(() => {
       loading.value = props.loading
+    })
+    useEventListener('scroll', check, {
+      target: scrollParent,
+      passive: true,
     })
     const renderLoading = () => {
       if (loading.value && !props.finished) {

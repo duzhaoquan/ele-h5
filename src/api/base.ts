@@ -3,7 +3,7 @@ import { showDialog } from 'vant'
 
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 2000,
+  timeout: 3000,
   //   headers: { 'X-Custom-Header': 'foobar' },
 })
 
