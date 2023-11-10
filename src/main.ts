@@ -8,6 +8,7 @@ import App from './App.vue'
 import router from './router'
 import 'vant/lib/index.css'
 import './assets/common.scss'
+import lazyPlugin from './directives/lazyLoading'
 
 const app = createApp(App)
 
@@ -27,5 +28,6 @@ app.use(Skeleton)
 app.use(Loading)
 app.use(Tab)
 app.use(Tabs)
+app.use(lazyPlugin)
 //ttt
 app.mount('#app')
