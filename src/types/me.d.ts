@@ -13,7 +13,7 @@ export interface ISuperCard {
   tips: string
 }
 
-export interface IMefor {
+export interface IMeInfor {
   cards: ICard[]
   superCard: ISuperCard
 }

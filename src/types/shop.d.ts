@@ -46,3 +46,8 @@ export interface IDiscountContent {
   limit: number
   label: string
 }
+export interface IShopDetail extends IShop {
+  announcement: string
+  discounts: IDiscount[]
+  redbags: IRedBag[]
+}

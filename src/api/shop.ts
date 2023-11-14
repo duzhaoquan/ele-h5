@@ -1,4 +1,4 @@
-import type { IShop, IList, IPaginate } from '@/types'
+import type { IShop, IList, IPaginate, IShopDetail } from '@/types'
 import axios from './base'
 
 export const fetchShopList = ({ _page, _limit }: IPaginate) => {
@@ -6,6 +6,14 @@ export const fetchShopList = ({ _page, _limit }: IPaginate) => {
     params: {
       _page,
       _limit,
+    },
+  })
+}
+
+export const fetchShopPageData = (id: string) => {
+  return axios.get<IShopDetail, IShopDetail>('shop_page', {
+    params: {
+      id,
     },
   })
 }
