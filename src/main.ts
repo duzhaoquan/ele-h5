@@ -13,6 +13,10 @@ import {
   Tabs,
   Tab,
   NavBar,
+  Form,
+  CellGroup,
+  Field,
+  Button,
 } from 'vant'
 
 import App from './App.vue'
@@ -34,6 +38,10 @@ app.use(router)
 app.use(Tabbar)
 app.use(TabbarItem)
 app.use(Search)
+app.use(Form)
+app.use(CellGroup)
+app.use(Field)
+app.use(Button)
 app.use(Sticky)
 app.use(Icon)
 app.use(Skeleton)

@@ -3,9 +3,10 @@ import { fetchMePageData } from '@/api/me'
 import type OpLoadingView from '@/components/OpLoadingView.vue'
 import type { ISuperCard } from '@/types'
 import { useAsync } from '@/use/useAsync'
+import { useAuth } from '@/use/useAuth'
 import { useRouter } from 'vue-router'
 
-const { user } = { user: { id: false } }
+const { user, logout } = useAuth()
 const { data, pending } = useAsync(fetchMePageData, {
   cards: [],
   superCard: {} as ISuperCard,
@@ -24,9 +25,9 @@ const gotoLogin = () => {
   <div class="me-page op-fullscreen">
     <div class="me-page__top">
       <template v-if="user.id">
-        <img class="avatar" src="https://b.yzcdn.cn/vant/icon-demo-1126.png" />
-        <div class="name" @click="gotoLogin">请登陆</div>
-        <div class="account op-thin-border" @click="gotoLogin">账号登陆</div>
+        <img class="avatar" :src="user.avatar" />
+        <div class="name">{{ user.nickname }}</div>
+        <div class="account op-thin-border" @click="logout">退出</div>
       </template>
       <template v-else>
         <img class="avatar" src="https://b.yzcdn.cn/vant/icon-demo-1126.png" />
