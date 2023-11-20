@@ -17,6 +17,7 @@ import {
   CellGroup,
   Field,
   Button,
+  ActionSheet,
 } from 'vant'
 
 import App from './App.vue'
@@ -49,5 +50,6 @@ app.use(Loading)
 app.use(Tab)
 app.use(Tabs)
 app.use(lazyPlugin)
+app.use(ActionSheet)
 //ttt
 app.mount('#app')
