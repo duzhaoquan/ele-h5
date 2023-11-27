@@ -18,6 +18,8 @@ import {
   Field,
   Button,
   ActionSheet,
+  Sidebar,
+  SidebarItem,
 } from 'vant'
 
 import App from './App.vue'
@@ -51,5 +53,12 @@ app.use(Tab)
 app.use(Tabs)
 app.use(lazyPlugin)
 app.use(ActionSheet)
+app.use(Sidebar)
+app.use(SidebarItem)
 //ttt
 app.mount('#app')
+declare global {
+  interface Window {
+    isWeixin: boolean
+  }
+}

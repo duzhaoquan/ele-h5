@@ -14,7 +14,6 @@ enum DiscountEnum {
   Optional = 4,
 }
 const props = defineProps<IProps>()
-
 const redduction = computed(() => {
   const reducion = props.data.discounts.find((v) => v.type === 1)
   return reducion ? reducion.content : []
@@ -210,7 +209,6 @@ const formatter = (v: IDiscount) => {
           font-weight: bold;
           margin-left: 2px;
           margin-right: 5px;
-          padding: 0px 0px 2px 0px;
         }
       }
       &__right {

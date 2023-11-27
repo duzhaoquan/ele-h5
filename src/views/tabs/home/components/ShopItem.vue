@@ -16,6 +16,10 @@ const reduction = computed(() => {
 
 const router = useRouter()
 const gotoShop = (id: string | number) => {
+  //js与原生交互
+  // const para = { params: { content: 'go to shop' } }
+  // const body = JSON.stringify(para)
+  // window.webkit.messageHandlers.gotoshop.postMessage(body)
   router.push({
     name: 'shop',
     params: {
@@ -23,10 +27,21 @@ const gotoShop = (id: string | number) => {
     },
   })
 }
+
+//js与原生交互
+window.gotoshopDetail = () => {
+  router.push({
+    name: 'shop',
+    params: {
+      id: props.data.id,
+    },
+  })
+}
 const [isMoreShown, showMore] = useToggle(false)
 </script>
 
 <template>
+  <router-view></router-view>
   <div class="home-shop-item" @click="gotoShop(data.id)">
     <img class="home-shop-item__poster" v-lazy="data.postUrl" />
     <div class="home-shop-item__info">
