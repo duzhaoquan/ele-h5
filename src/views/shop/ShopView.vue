@@ -64,7 +64,7 @@ const onClickLeft = () => history.back()
           <component :is="v.component"></component>
         </VanTab>
       </VanTabs>
-      <ShopCart class="shop-cart"></ShopCart>
+      <ShopCart></ShopCart>
     </OpLoadingView>
   </div>
 </template>
@@ -72,8 +72,9 @@ const onClickLeft = () => history.back()
 <style lang="scss" scoped>
 .shop-page {
   background: white;
-  .shop-cart {
-    position: fixed;
+  .van-tabs__line,
+  .van-nav-bar {
+    z-index: 0;
   }
 }
 </style>

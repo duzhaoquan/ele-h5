@@ -20,6 +20,9 @@ import {
   ActionSheet,
   Sidebar,
   SidebarItem,
+  CheckboxGroup,
+  Checkbox,
+  Popup,
 } from 'vant'
 
 import App from './App.vue'
@@ -55,6 +58,9 @@ app.use(lazyPlugin)
 app.use(ActionSheet)
 app.use(Sidebar)
 app.use(SidebarItem)
+app.use(Checkbox)
+app.use(CheckboxGroup)
+app.use(Popup)
 //ttt
 app.mount('#app')
 declare global {
