@@ -74,6 +74,7 @@ const onClickLeft = () => history.back()
   background: white;
   .shop-cart {
     position: fixed;
+    background: white;
   }
 }
 </style>
