@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cart'
 import { type IGood } from '@/types/good.d'
+import { useEventBus } from '@/use/useEventBus'
 import { computed } from 'vue'
 
 interface IPorp {
@@ -9,9 +10,11 @@ interface IPorp {
 const props = defineProps<IPorp>()
 
 const cartStore = useCartStore()
+const eventBus = useEventBus()
 const cartCount = computed(() => cartStore.cartCountById(props.good.id))
-const add = () => {
+const add = (event: Event) => {
   cartStore.pushProductionToCart(props.good)
+  eventBus.emit('cart-add', event.target)
 }
 const minus = () => {
   cartStore.removeProdutionFromCart(props.good)
