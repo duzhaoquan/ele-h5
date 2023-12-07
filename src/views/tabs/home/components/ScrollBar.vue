@@ -3,6 +3,7 @@ import type { IScrollBarInfo } from '@/types'
 import { ref, onMounted } from 'vue'
 import { useInterval } from '@/use/useInterval'
 import { useTimeout } from '@/use/ useTimeout'
+import { useLifeHook } from '@/use/useLifHook'
 
 interface Iprops {
   intervalTime?: number
@@ -17,6 +18,7 @@ const props = withDefaults(defineProps<Iprops>(), {
   height: 40,
 })
 
+const { onUnmounted } = useLifeHook()
 const heightPX = `${props.height}px`
 const containerRef = ref()
 onMounted(() => {
@@ -31,12 +33,15 @@ onMounted(() => {
       // 如果超过 item 个数就需要将第一个元素接到后面
       firstSwipeItem.style.transform = `translateY(${props.height * count}px)`
       // 第一个元素滚动动画结束之后，将整个 container 位置重置
-      const timeout = setTimeout(() => {
-        container.style.transition = ''
-        firstSwipeItem.style.transform = ''
-        container.style.transform = ''
-        clearTimeout(timeout)
-      }, props.transitionTime)
+      useTimeout(
+        () => {
+          container.style.transition = ''
+          firstSwipeItem.style.transform = ''
+          container.style.transform = ''
+        },
+        props.transitionTime,
+        onUnmounted,
+      )
     }
     container.style.transform = `translateY(-${index * props.height}px)`
     container.style.transition = `all linear ${props.transitionTime}ms`
