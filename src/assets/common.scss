@@ -5,6 +5,9 @@
 }
 
 .op {
+  &-overflow-hidden {
+    overflow: hidden;
+  }
   &-thin-border {
     color: rgb(247, 68, 68);
     position: relative;

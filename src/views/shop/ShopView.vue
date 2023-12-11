@@ -10,6 +10,8 @@ import { PRIMARY_COLOR } from '@/config'
 import GoodList from './components/GoodList.vue'
 import ShopCart from './components/ShopCart.vue'
 
+import { useLockScroll } from '@/use/useLockScroll'
+
 const SHOP_TABS = [
   {
     value: 1,
@@ -17,17 +19,18 @@ const SHOP_TABS = [
     component: GoodList,
   },
   {
-    value: 1,
+    value: 2,
     label: '评价',
     component: OpTodo,
   },
   {
-    value: 1,
+    value: 3,
     label: '商家',
     component: OpTodo,
   },
 ]
-const active = ref(1)
+const active = ref(SHOP_TABS[0].value)
+useLockScroll(() => active.value === 1)
 const router = useRoute()
 const { id } = router.params
 const { data, pending } = useAsync(() => fetchShopPageData(id as string), {
@@ -60,11 +63,11 @@ const onClickLeft = () => history.back()
     <OpLoadingView :loading="pending" type="skeleton">
       <ShopHeader :data="data"></ShopHeader>
       <VanTabs v-model:active="active" sticky :color="PRIMARY_COLOR" animated swipeable>
-        <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" name="v.value">
+        <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
           <component :is="v.component"></component>
         </VanTab>
       </VanTabs>
-      <ShopCart></ShopCart>
+      <ShopCart v-if="active === 1"></ShopCart>
     </OpLoadingView>
   </div>
 </template>
