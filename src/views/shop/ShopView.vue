@@ -59,7 +59,7 @@ const onClickLeft = () => history.back()
 
 <template>
   <div class="shop-page op-fullscreen">
-    <VanNavBar left-text="返回" @click-left="onClickLeft"></VanNavBar>
+    <VanNavBar left-text="返回" @click-left="onClickLeft" sticky></VanNavBar>
     <OpLoadingView :loading="pending" type="skeleton">
       <ShopHeader :data="data"></ShopHeader>
       <VanTabs v-model:active="active" sticky :color="PRIMARY_COLOR" animated swipeable>

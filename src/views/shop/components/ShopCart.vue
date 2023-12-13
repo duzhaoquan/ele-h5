@@ -22,7 +22,7 @@ eventBus.on('cart-add', (el) => {
 
 const cartLogo = computed(() => (store.total ? CartLogo : EmptyCartLogo))
 
-const [isCartListShow, cartListShow] = useToggle(store.isAllChecked)
+const [isCartListShow, cartListShow] = useToggle(store.isAllChecked && store.total > 0)
 const showCartListPop = () => {
   if (!store.total) {
     return
