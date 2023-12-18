@@ -11,6 +11,13 @@ import GoodList from './components/GoodList.vue'
 import ShopCart from './components/ShopCart.vue'
 
 import { useLockScroll } from '@/use/useLockScroll'
+import { computed } from 'vue'
+import { onMounted } from 'vue'
+import { useRect } from '@/use/useRect'
+import { nextTick } from 'vue'
+import { useTimeout } from '@/use/ useTimeout'
+import { UseCountDown } from '@/use/useCountDown'
+import { useInterval } from '@/use/useInterval'
 
 const SHOP_TABS = [
   {
@@ -55,17 +62,30 @@ const { data, pending } = useAsync(() => fetchShopPageData(id as string), {
   tops: [],
 })
 const onClickLeft = () => history.back()
+const root = ref()
+const goods = ref()
+
+const conponentHeight = computed(() => {
+  if (root.value && goods) {
+    return useRect(root).height - useRect(goods).top - 80
+  }
+  return 0
+})
 </script>
 
 <template>
-  <div class="shop-page op-fullscreen">
+  <div class="shop-page op-fullscreen" ref="root">
     <VanNavBar left-text="返回" @click-left="onClickLeft" sticky></VanNavBar>
     <OpLoadingView :loading="pending" type="skeleton">
       <ShopHeader :data="data"></ShopHeader>
       <VanTabs v-model:active="active" sticky :color="PRIMARY_COLOR" animated swipeable>
-        <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
-          <component :is="v.component"></component>
-        </VanTab>
+        <div ref="goods">
+          <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
+            <div class="list" v-bind:style="{ height: conponentHeight + 'px' }">
+              <component :is="v.component"></component>
+            </div>
+          </VanTab>
+        </div>
       </VanTabs>
       <ShopCart v-if="active === 1"></ShopCart>
     </OpLoadingView>
