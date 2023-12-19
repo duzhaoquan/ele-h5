@@ -12,12 +12,7 @@ import ShopCart from './components/ShopCart.vue'
 
 import { useLockScroll } from '@/use/useLockScroll'
 import { computed } from 'vue'
-import { onMounted } from 'vue'
 import { useRect } from '@/use/useRect'
-import { nextTick } from 'vue'
-import { useTimeout } from '@/use/ useTimeout'
-import { UseCountDown } from '@/use/useCountDown'
-import { useInterval } from '@/use/useInterval'
 
 const SHOP_TABS = [
   {
@@ -75,9 +70,12 @@ const conponentHeight = computed(() => {
 
 <template>
   <div class="shop-page op-fullscreen" ref="root">
-    <VanNavBar left-text="返回" @click-left="onClickLeft" sticky></VanNavBar>
+    <img src="imgs/shop_page/shop-store.jpg" />
+    <VanIcon class="back-icon" name="arrow-left" @click="onClickLeft"></VanIcon>
     <OpLoadingView :loading="pending" type="skeleton">
-      <ShopHeader :data="data"></ShopHeader>
+      <div class="header">
+        <ShopHeader :data="data"></ShopHeader>
+      </div>
       <VanTabs v-model:active="active" sticky :color="PRIMARY_COLOR" animated swipeable>
         <div ref="goods">
           <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
@@ -95,6 +93,23 @@ const conponentHeight = computed(() => {
 <style lang="scss" scoped>
 .shop-page {
   background: white;
+  img {
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+    object-fit: cover;
+  }
+  .header {
+    position: relative;
+    z-index: 1;
+  }
+  .back-icon {
+    margin-left: 10px;
+    margin-top: 20px;
+    padding: 6px 8px 6px 4px;
+    background: rgb(203, 233, 203);
+    border-radius: 50%;
+  }
   .van-tabs__line,
   .van-nav-bar {
     z-index: 0;
