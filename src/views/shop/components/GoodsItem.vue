@@ -10,8 +10,8 @@ const props = defineProps<IProps>()
 const route = useRouter()
 const gotoGoods = () => {
   route.push({
-    name: 'goods',
-    params: { id: props.data.id },
+    path: '/goods',
+    query: { data: JSON.stringify(props.data) },
   })
 }
 </script>

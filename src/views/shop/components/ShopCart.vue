@@ -108,7 +108,7 @@ const removeAll = () => {
       <div class="content__right">
         <div v-if="store.total" class="order-btn">
           <div class="label">领券购买</div>
-          <div>预计券后¥{{ store.totalOldPrice }}</div>
+          <div>预计券后¥{{ store.totalPrice }}</div>
         </div>
         <div v-else class="order-btn order-btn--empty">¥20元起送</div>
       </div>

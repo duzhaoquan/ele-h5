@@ -33,8 +33,8 @@ const SHOP_TABS = [
 ]
 const active = ref(SHOP_TABS[0].value)
 useLockScroll(() => active.value === 1)
-const router = useRoute()
-const { id } = router.params
+const route = useRoute()
+const id = route.query.id
 const { data, pending } = useAsync(() => fetchShopPageData(id as string), {
   announcement: '',
   discounts: [],

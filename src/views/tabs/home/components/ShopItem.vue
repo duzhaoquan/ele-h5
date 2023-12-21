@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IShop } from '@/types'
 import { useToggle } from '@/use/useToggle'
+import { defineStore } from 'pinia'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -15,34 +16,34 @@ const reduction = computed(() => {
 })
 
 const router = useRouter()
-const gotoShop = (id: string | number) => {
+const gotoShop = () => {
   //js与原生交互
   // const para = { params: { content: 'go to shop' } }
   // const body = JSON.stringify(para)
   // window.webkit.messageHandlers.gotoshop.postMessage(body)
   router.push({
-    name: 'shop',
-    params: {
-      id,
+    path: 'shop',
+    query: {
+      id: props.data.id,
     },
   })
 }
 
 //js与原生交互
-window.gotoshopDetail = () => {
-  router.push({
-    name: 'shop',
-    params: {
-      id: props.data.id,
-    },
-  })
-}
+// window.gotoshopDetail = () => {
+//   router.push({
+//     name: 'shop',
+//     params: {
+//       id: props.data.id,
+//     },
+//   })
+// }
 const [isMoreShown, showMore] = useToggle(false)
 </script>
 
 <template>
   <router-view></router-view>
-  <div class="home-shop-item" @click="gotoShop(data.id)">
+  <div class="home-shop-item" @click="gotoShop">
     <img class="home-shop-item__poster" v-lazy="data.postUrl" />
     <div class="home-shop-item__info">
       <div class="info__top">

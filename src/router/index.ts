@@ -4,6 +4,7 @@ import HomeView from '../views/tabs/home/HomeView.vue'
 import OrderView from '../views/tabs/order//OrderView.vue'
 import MeView from '../views/tabs/me/MeView.vue'
 import ShopView from '@/views/shop/ShopView.vue'
+import GoodDetail from '@/views/shop/components/GoodDetail.vue'
 import LoginView from '@/views/login/LoginView.vue'
 
 const router = createRouter({
@@ -25,6 +26,7 @@ const router = createRouter({
     },
     { name: 'shop', path: '/shop', component: ShopView },
     { name: 'login', path: '/login', component: LoginView },
+    { name: 'goods', path: '/goods', component: GoodDetail },
   ],
 })
 
