@@ -13,6 +13,7 @@ import ShopCart from './components/ShopCart.vue'
 import { useLockScroll } from '@/use/useLockScroll'
 import { computed } from 'vue'
 import { useRect } from '@/use/useRect'
+import ShopComment from './components/ShopComment.vue'
 
 const SHOP_TABS = [
   {
@@ -23,7 +24,7 @@ const SHOP_TABS = [
   {
     value: 2,
     label: '评价',
-    component: OpTodo,
+    component: ShopComment,
   },
   {
     value: 3,
@@ -76,16 +77,15 @@ const conponentHeight = computed(() => {
       <div class="header">
         <ShopHeader :data="data"></ShopHeader>
       </div>
+      <div ref="goods"></div>
       <VanTabs v-model:active="active" sticky :color="PRIMARY_COLOR" animated swipeable>
-        <div ref="goods">
-          <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
-            <div class="list" v-bind:style="{ height: conponentHeight + 'px' }">
-              <component :is="v.component"></component>
-            </div>
-          </VanTab>
-        </div>
+        <VanTab v-for="v in SHOP_TABS" :key="v.label" :title="v.label" :name="v.value">
+          <div v-bind:style="{ height: conponentHeight + 'px' }">
+            <component :is="v.component"></component>
+          </div>
+        </VanTab>
       </VanTabs>
-      <ShopCart v-if="active === 1"></ShopCart>
+      <ShopCart class="shop-vart" v-if="active === 1"></ShopCart>
     </OpLoadingView>
   </div>
 </template>
@@ -113,6 +113,9 @@ const conponentHeight = computed(() => {
   .van-tabs__line,
   .van-nav-bar {
     z-index: 0;
+  }
+  .shop-cart {
+    z-index: 2;
   }
 }
 </style>

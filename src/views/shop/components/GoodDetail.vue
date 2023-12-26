@@ -14,7 +14,10 @@ const sheight = ref(300) //高度
 const imgWidth = ref(1) //放大比例
 const isPlay = ref(false) //是否播放动画
 
-let clientMoveY = 0 //按下
+let clientMoveY = 0 //按下时的位置（上一次的位置）
+const start = (e: TouchEvent) => {
+  clientMoveY = e.changedTouches[0].clientY
+}
 const move = (e: TouchEvent) => {
   if (clientMoveY === 0) {
     clientMoveY = e.changedTouches[0].clientY
@@ -56,7 +59,7 @@ const end = (e: unknown) => {
 }
 </script>
 <template>
-  <div class="good-detail op-fullscreen" @touchmove="move" @touchend="end">
+  <div class="good-detail op-fullscreen" @touchstart="start" @touchmove="move" @touchend="end">
     <VanIcon class="back-icon" name="arrow-left" @click="onClickLeft"></VanIcon>
     <div :class="{ banner: true, isPlay: isPlay }" :style="{ height: sheight + 'px' }">
       <img

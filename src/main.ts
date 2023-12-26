@@ -23,6 +23,8 @@ import {
   CheckboxGroup,
   Checkbox,
   Popup,
+  List,
+  Cell,
 } from 'vant'
 
 import App from './App.vue'
@@ -61,6 +63,9 @@ app.use(SidebarItem)
 app.use(Checkbox)
 app.use(CheckboxGroup)
 app.use(Popup)
+app.use(List)
+app.use(Loading)
+app.use(Cell)
 //ttt
 app.mount('#app')
 declare global {
