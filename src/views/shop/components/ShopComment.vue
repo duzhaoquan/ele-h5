@@ -56,7 +56,7 @@ const onLoad = async () => {
 </script>
 
 <template>
-  <div class="comment-list">
+  <div class="comment-list op-fullscreen">
     <div class="categores">
       <div
         :class="{ categore: true, selected: i === selected }"
@@ -83,12 +83,16 @@ const onLoad = async () => {
 </template>
 
 <style lang="scss" scoped>
+body {
+  padding-bottom: constant(safe-area-inset-bottom);
+  //padding-bottom: env(safe-area-inset-bottom);
+}
 .comment-list {
+  background: white;
   padding: 10px 10px;
   height: 100%;
   position: relative;
-  .loading {
-  }
+
   .categores {
     .categore {
       display: inline-block;

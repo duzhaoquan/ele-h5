@@ -186,6 +186,7 @@ const formatter = (v: IDiscount) => {
 
   &__redbags {
     display: flex;
+    line-height: 1.4;
     margin: 8px 0;
     align-items: baseline;
     .redbag {
@@ -226,6 +227,7 @@ const formatter = (v: IDiscount) => {
     .flex {
       flex: 1;
       .activity {
+        line-height: 1;
         padding: 1px 5px;
         margin-right: 8px;
         display: inline-block;

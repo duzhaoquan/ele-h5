@@ -14,7 +14,7 @@ import { useLockScroll } from '@/use/useLockScroll'
 import { computed } from 'vue'
 import { useRect } from '@/use/useRect'
 import ShopComment from './components/ShopComment.vue'
-
+import ShopInfo from './components/ShopInfo.vue'
 const SHOP_TABS = [
   {
     value: 1,
@@ -29,7 +29,7 @@ const SHOP_TABS = [
   {
     value: 3,
     label: '商家',
-    component: OpTodo,
+    component: ShopInfo,
   },
 ]
 const active = ref(SHOP_TABS[0].value)
@@ -63,7 +63,7 @@ const goods = ref()
 
 const conponentHeight = computed(() => {
   if (root.value && goods) {
-    return useRect(root).height - useRect(goods).top - 80
+    return useRect(root).height - useRect(goods).top
   }
   return 0
 })
@@ -110,12 +110,8 @@ const conponentHeight = computed(() => {
     background: rgb(203, 233, 203);
     border-radius: 50%;
   }
-  .van-tabs__line,
-  .van-nav-bar {
+  .van-tabs--line {
     z-index: 0;
-  }
-  .shop-cart {
-    z-index: 2;
   }
 }
 </style>

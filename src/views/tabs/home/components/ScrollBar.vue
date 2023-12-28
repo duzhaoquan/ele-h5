@@ -7,7 +7,7 @@ import { useLifeHook } from '@/use/useLifHook'
 
 interface Iprops {
   intervalTime?: number
-  transitionTime: number
+  transitionTime?: number
   height?: number
   data: IScrollBarInfo[]
 }

@@ -98,7 +98,7 @@ const scrollAction = () => {
   --van-sidebar-selected-border-color: none;
   --van-sidebar-padding: 14px 5px;
   --van-sidebar-font-size: 13px;
-
+  padding-bottom: 120px;
   display: flex;
   height: 100%;
   .left {
@@ -109,7 +109,6 @@ const scrollAction = () => {
     overflow: hidden;
     overflow-y: auto;
     margin: 0 10px;
-
     .category-name {
       font-size: 15px;
       font-weight: bold;

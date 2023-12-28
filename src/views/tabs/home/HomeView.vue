@@ -85,7 +85,6 @@ const onTabScroll = ({ isFixed }: { isFixed: boolean }) => {
 .fade-leave-to {
   opacity: 0;
 }
-
 .home-page {
   background: var(--op-gray-bg-color);
   padding-bottom: 70px;

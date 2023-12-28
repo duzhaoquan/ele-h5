@@ -6,7 +6,7 @@ import { computed } from 'vue'
 import { useToggle } from '@/use/useToggle'
 import { useTransition } from '@/use/useTransition'
 import GoodsItem from './GoodsItem.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { showConfirmDialog } from 'vant'
 import { useEventBus } from '@/use/useEventBus'
 
@@ -42,10 +42,17 @@ const removeAll = () => {
       console.log(error)
     })
 }
+const safeAreaHeight = ref('0px')
+onMounted(() => {
+  // 获取底部安全区域的高度
+  const isIphone = /iPhone/i.test(navigator.userAgent)
+  const bottomSafe = isIphone && window.screen.height > 800 ? '34px' : '0px'
+  safeAreaHeight.value = bottomSafe
+})
 </script>
 
 <template>
-  <div class="shop-cart">
+  <div class="shop-cart" :style="{ bottom: safeAreaHeight }">
     <VanPopup v-model:show="isCartListShow" round position="bottom">
       <div class="shop-cart__popup">
         <div class="shop-cart__tips">
@@ -129,7 +136,7 @@ const removeAll = () => {
 .shop-cart {
   width: 100%;
   position: fixed;
-  bottom: 0;
+
   left: 0;
   background: white;
   --var-checkbox-size: 16px;

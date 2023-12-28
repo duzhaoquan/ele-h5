@@ -64,7 +64,6 @@ app.use(Checkbox)
 app.use(CheckboxGroup)
 app.use(Popup)
 app.use(List)
-app.use(Loading)
 app.use(Cell)
 //ttt
 app.mount('#app')

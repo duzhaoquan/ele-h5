@@ -153,7 +153,7 @@ const end = (e: unknown) => {
     margin-top: 10px;
     display: flex;
     padding: 10px;
-    align-items: end;
+    align-items: flex-end;
     .bag {
       color: gray;
       width: 40px;
