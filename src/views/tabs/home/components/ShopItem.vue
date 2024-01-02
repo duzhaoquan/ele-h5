@@ -29,7 +29,7 @@ const gotoShop = () => {
   })
 }
 
-//js与原生交互
+// js与原生交互
 // window.gotoshopDetail = () => {
 //   router.push({
 //     name: 'shop',

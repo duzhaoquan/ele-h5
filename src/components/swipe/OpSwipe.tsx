@@ -1,9 +1,9 @@
-import { useChildren, type Child, type NotNullChild } from '@/use/useChildren'
+import { useChildren } from '@/use/useChildren'
 import { doubleRaf } from '@/utils/raf'
 import { clamp, createNamespace } from 'vant/lib/utils'
-import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount, Ref } from 'vue'
+import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
 import './OpSwipe.scss'
-import OpSwipeItem from './OpSwipeItem'
+//import OpSwipeItem from './OpSwipeItem'
 import { useTouch } from '@/use/useTouch'
 
 const [name, bem] = createNamespace('swipe')
@@ -22,22 +22,27 @@ export type SwipeState = {
 export default defineComponent({
   name,
   props: {
+    //是否自动播放
     autoplay: {
       type: Number,
       default: 0,
     },
+    //时间间隔
     duration: {
       type: Number,
       default: 1000,
     },
+    //是否循环播放
     loop: {
       type: Boolean,
       default: true,
     },
+    //是否展示页码
     showIndicators: {
       type: Boolean,
       default: true,
     },
+    //方向 水平还是数值方向
     vertical: {
       type: Boolean,
       defalut: false,
@@ -71,6 +76,7 @@ export default defineComponent({
       return style
     })
 
+    //获取下一页对应页码，pace移动几页
     const getTargetActive = (pace: number) => {
       const active = state.active
       if (pace) {
@@ -82,11 +88,13 @@ export default defineComponent({
       }
       return active
     }
+    //获取下一页对应的偏移距离
     const getTargetOffset = (active: number, offset: number) => {
       const position = active * size.value
       const targetOffset = offset - position
       return targetOffset
     }
+    //最小偏移距离
     const minOffset = computed(() => {
       if (state.rect) {
         const base = props.vertical ? state.rect.height : state.rect.width
@@ -94,17 +102,19 @@ export default defineComponent({
       }
       return 0
     })
+    //移动到下一页
     const move = ({ pace = 0, offset = 0 }) => {
       if (count.value > 1) {
         const targetActive = getTargetActive(pace)
         const targetOffset = getTargetOffset(targetActive, offset)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
         if (props.loop) {
           if (targetOffset !== minOffset.value) {
+            //再移动就右边出现空白了即最后一页了
             const outRightBound = targetOffset < minOffset.value
             if (props.vertical) {
               if (outRightBound) {
+                //到最后一页时把第一页拼接到后边，形成循环
                 firstChild.value.style.transform = `translateY(${trackSize.value}px)`
               } else {
                 firstChild.value.style.transform = `translateY(0px)`
@@ -141,6 +151,7 @@ export default defineComponent({
     }
     const correctPositon = () => {
       state.swiping = true
+      //如果超出页码范围返回首页初始位置，形成循环播放
       if (state.active < 0) {
         move({ pace: count.value })
       } else if (state.active >= count.value) {
@@ -182,22 +193,25 @@ export default defineComponent({
       state.height = rect.height
       autoplay()
     }
+    //对滑动手势的一些处理，主要是获取滑动距离位置等的封装
     const touch = useTouch()
     const delta = computed(() => (props.vertical ? touch.deltaY.value : touch.deltaX.value))
     let touchStartTime: number
     const onTouchStart = (evevt: TouchEvent) => {
       touch.start(evevt)
       touchStartTime = Date.now()
-
+      //停止制动播放
       stopAutoplay()
       correctPositon()
     }
+    //触发手势滑动
     const onTouchMove = (event: TouchEvent) => {
       touch.move(event)
 
       event.preventDefault()
       move({ offset: delta.value })
     }
+    //手势滑动结束时决定是否滚到下一下
     const onTouchEnd = () => {
       const duration = Date.now() - touchStartTime
       const speed = delta.value / duration
@@ -218,7 +232,7 @@ export default defineComponent({
       state.swiping = false
       autoplay()
     }
-
+    //页码
     const activeIndicator = computed(() => state.active % count.value)
     const renderDot = (_: string, index: number) => {
       const active = index === activeIndicator.value

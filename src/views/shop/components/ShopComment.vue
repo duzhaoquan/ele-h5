@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { fetchCommentData } from '@/api/comments'
 import type { Comment, CommentCategory } from '@/types/comments'
 import CommentItem from './CommentItem.vue'
-import { computed } from 'vue'
 
 let page = 1
 
@@ -83,10 +82,6 @@ const onLoad = async () => {
 </template>
 
 <style lang="scss" scoped>
-body {
-  padding-bottom: constant(safe-area-inset-bottom);
-  //padding-bottom: env(safe-area-inset-bottom);
-}
 .comment-list {
   background: white;
   padding: 10px 10px;

@@ -42,17 +42,75 @@ const removeAll = () => {
       console.log(error)
     })
 }
-const safeAreaHeight = ref('0px')
+
+const bottomAreaHeight = ref(0)
+let safeAreaHeight = 0
+let topSafeAreaHeight = 0
+let bottomSafeAreaHeight = 0
 onMounted(() => {
   // 获取底部安全区域的高度
   const isIphone = /iPhone/i.test(navigator.userAgent)
-  const bottomSafe = isIphone && window.screen.height > 800 ? '34px' : '0px'
-  safeAreaHeight.value = bottomSafe
+
+  if (isIphone) {
+    safeAreaHeight = window.screen.height - window.innerHeight
+
+    if (safeAreaHeight >= 44) {
+      bottomSafeAreaHeight = 34
+    }
+
+    switch (safeAreaHeight) {
+      case 93:
+      case 59:
+        topSafeAreaHeight = 59
+        break
+
+      case 81:
+      case 47:
+        topSafeAreaHeight = 47
+        break
+
+      case 84:
+      case 50:
+        topSafeAreaHeight = 50
+        break
+
+      case 78:
+      case 44:
+        topSafeAreaHeight = 44
+        break
+
+      case 82:
+      case 48:
+        topSafeAreaHeight = 48
+        break
+
+      case 20:
+        topSafeAreaHeight = 20
+        break
+
+      default:
+        break
+    }
+  }
+  bottomAreaHeight.value = topSafeAreaHeight === safeAreaHeight ? bottomSafeAreaHeight : 0
+
+  //js与原生交互
+  // const para = {
+  //   params: {
+  //     innerHeight: window.innerHeight,
+  //     screnHeight: window.screen.height,
+  //     safeAreaHeightValue: safeAreaHeight,
+  //     top: topSafeAreaHeight,
+  //     bottom: bottomSafeAreaHeight,
+  //   },
+  // }
+  // const body = JSON.stringify(para)
+  // window.webkit.messageHandlers.request.postMessage(body)
 })
 </script>
 
 <template>
-  <div class="shop-cart" :style="{ bottom: safeAreaHeight }">
+  <div class="shop-cart" :style="{ bottom: bottomAreaHeight + 'px' }">
     <VanPopup v-model:show="isCartListShow" round position="bottom">
       <div class="shop-cart__popup">
         <div class="shop-cart__tips">

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ICountdown } from '@/types'
 import { UseCountDown } from '@/use/useCountDown'
-// import { useCountDown } from '@/use/useCountDown'
 
 interface IProps {
   data: ICountdown
