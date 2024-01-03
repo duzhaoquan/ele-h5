@@ -54,7 +54,13 @@ const onTabScroll = ({ isFixed }: { isFixed: boolean }) => {
         <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
         <div class="home-page__activity">
           <CountDown :data="data.countdown"></CountDown>
-          <OpSwipe class="home-page__activity__swipe" :autoplay="3000" :loop="true">
+          <OpSwipe
+            class="home-page__activity__swipe"
+            :autoplay="3000"
+            :loop="true"
+            :vertical="false"
+            :forward="false"
+          >
             <OpSwipeItem v-for="v in data.activities" :key="v">
               <img :src="v" />
             </OpSwipeItem>

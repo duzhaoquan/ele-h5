@@ -1,9 +1,8 @@
 import { useChildren } from '@/use/useChildren'
 import { doubleRaf } from '@/utils/raf'
 import { clamp, createNamespace } from 'vant/lib/utils'
-import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
 import './OpSwipe.scss'
-//import OpSwipeItem from './OpSwipeItem'
 import { useTouch } from '@/use/useTouch'
 
 const [name, bem] = createNamespace('swipe')
@@ -47,6 +46,11 @@ export default defineComponent({
       type: Boolean,
       defalut: false,
     },
+    //滚动方向是否正方向（下/右为正）
+    forward: {
+      type: Boolean,
+      defalut: false,
+    },
   },
   setup(props, { slots }) {
     const root = ref()
@@ -64,14 +68,29 @@ export default defineComponent({
     const count = computed(() => children.length)
     const size = computed(() => state[props.vertical ? 'height' : 'width'])
     const trackSize = computed(() => count.value * size.value)
-    const firstChild = computed(() => track.value.children[0])
-    const lastChild = computed(() => track.value.children[count.value - 1])
+    const pStyle = computed(() => {
+      const x = props.vertical ? 'bottom' : 'left'
+      const y = props.vertical ? 'right' : 'bottom'
+      const style = {
+        Position: 'absolute',
+
+        [x]: '50%',
+        [y]: '10px',
+        transform: `translate${props.vertical ? 'Y' : 'X'}(-50%)`,
+
+        display: 'flex',
+        FlexDirection: `${props.vertical ? 'column' : 'row'}`,
+      }
+      return style
+    })
     const trackStyle = computed(() => {
       const mainAxis = props.vertical ? 'height' : 'width'
       const style = {
         transform: `translate${props.vertical ? 'Y' : 'X'}(${state.offset}px)`,
         transitionDuration: `${state.swiping ? 0 : props.duration}ms`,
         [mainAxis]: `${trackSize.value}px`,
+        display: 'flex',
+        FlexDirection: `${props.vertical ? 'column' : 'row'}`,
       }
       return style
     })
@@ -107,41 +126,18 @@ export default defineComponent({
       if (count.value > 1) {
         const targetActive = getTargetActive(pace)
         const targetOffset = getTargetOffset(targetActive, offset)
-
         if (props.loop) {
-          if (targetOffset !== minOffset.value) {
-            //再移动就右边出现空白了即最后一页了
+          // 正向滚动，从右向左
+          if (children[0] && targetOffset !== minOffset.value) {
             const outRightBound = targetOffset < minOffset.value
-            if (props.vertical) {
-              if (outRightBound) {
-                //到最后一页时把第一页拼接到后边，形成循环
-                firstChild.value.style.transform = `translateY(${trackSize.value}px)`
-              } else {
-                firstChild.value.style.transform = `translateY(0px)`
-              }
-            } else {
-              if (outRightBound) {
-                firstChild.value.style.transform = `translateX(${trackSize.value}px)`
-              } else {
-                firstChild.value.style.transform = `translateX(0px)`
-              }
-            }
+            //把第一个元素复原offset 从-size*count 变成0
+            children[0].setOffset(outRightBound ? trackSize.value : 0)
           }
-          if (targetOffset !== 0) {
-            const outLeftBound = targetOffset > 0
-            if (props.vertical) {
-              if (outLeftBound) {
-                lastChild.value.style.transform = `translateY(${-trackSize.value}px)`
-              } else {
-                lastChild.value.style.transform = `translateY(0px)`
-              }
-            } else {
-              if (outLeftBound) {
-                lastChild.value.style.transform = `translateX(${-trackSize.value}px)`
-              } else {
-                lastChild.value.style.transform = `translateX(0px)`
-              }
-            }
+          // 反向滚动，从左向右
+          const last = children[count.value - 1]
+          if (last && targetOffset !== 0) {
+            const onLeftBound = targetOffset > 0
+            last.setOffset(onLeftBound ? -trackSize.value : 0)
           }
         }
 
@@ -163,7 +159,7 @@ export default defineComponent({
       correctPositon()
       doubleRaf(() => {
         state.swiping = false
-        move({ pace: 1 })
+        move({ pace: props.forward ? -1 : 1 })
       })
     }
 
@@ -233,14 +229,22 @@ export default defineComponent({
       autoplay()
     }
     //页码
-    const activeIndicator = computed(() => state.active % count.value)
+    const activeIndicator = computed(() => {
+      const num = state.active % count.value
+      return num >= 0 ? num : count.value - 1
+    })
     const renderDot = (_: string, index: number) => {
       const active = index === activeIndicator.value
       return <i class={bem('indicator', { active })}> </i>
     }
+
     const renderIndicator = () => {
       if (props.showIndicators) {
-        return <div class={bem('indicators')}>{Array(count.value).fill('').map(renderDot)}</div>
+        return (
+          <div class={bem('indicators')} style={pStyle.value}>
+            {Array(count.value).fill('').map(renderDot)}
+          </div>
+        )
       }
     }
 
@@ -250,6 +254,7 @@ export default defineComponent({
     })
     onMounted(init)
     onBeforeUnmount(stopAutoplay)
+    watch(() => props.autoplay, autoplay)
     return () => (
       <div ref={root} class={bem()}>
         <div
