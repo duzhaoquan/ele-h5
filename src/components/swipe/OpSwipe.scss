@@ -7,19 +7,15 @@
     position: relative;
   }
 
-  // &__indicators1 {
-  //   position: absolute;
-  //   bottom: var(--van-swipe-indicator-margin);
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  //   display: flex;
-  // }
+  &__indicators {
+    position: absolute;
+  }
 
   &__indicator {
     width: var(--van-swipe-indicator-size);
     height: var(--van-swipe-indicator-size);
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin-right: var(--van-swipe-indicator-size);
+    margin-bottom: var(--van-swipe-indicator-size);
     border-radius: 100%;
     opacity: var(--van-swipe-indicator-inactive-opacity);
     background-color: var(--van-swipe-indicator-inactive-background);

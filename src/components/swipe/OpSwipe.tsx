@@ -1,13 +1,14 @@
 import { useChildren } from '@/use/useChildren'
 import { doubleRaf } from '@/utils/raf'
-import { clamp, createNamespace } from 'vant/lib/utils'
+import { clamp } from '@/utils/format'
 import { ref, defineComponent, computed, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
 import './OpSwipe.scss'
 import { useTouch } from '@/use/useTouch'
+import { createNamespace } from '@/utils/create'
 
 const [name, bem] = createNamespace('swipe')
 
-export const SWIPE_KEY = Symbol('swipe')
+export const SWIPE_KEY = Symbol(name)
 
 export type SwipeState = {
   rect: { width: number; height: number } | null
@@ -69,13 +70,11 @@ export default defineComponent({
     const size = computed(() => state[props.vertical ? 'height' : 'width'])
     const trackSize = computed(() => count.value * size.value)
     const pStyle = computed(() => {
-      const x = props.vertical ? 'bottom' : 'left'
+      const x = props.vertical ? 'top' : 'left'
       const y = props.vertical ? 'right' : 'bottom'
       const style = {
-        Position: 'absolute',
-        alignItems: 'flex-end',
         [x]: '50%',
-        [y]: '10px',
+        [y]: '0px',
         transform: `translate${props.vertical ? 'Y' : 'X'}(-50%)`,
 
         display: 'flex',
@@ -96,7 +95,7 @@ export default defineComponent({
     })
 
     //获取下一页对应页码，pace移动几页
-    const getTargetActive = (pace: number) => {
+    const getTargetActive = (pace: number): number => {
       const active = state.active
       if (pace) {
         if (props.loop) {

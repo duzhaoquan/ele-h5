@@ -1,15 +1,12 @@
 export function createBEM(name: string) {
   return (el?: string, mods?: Record<string, boolean>) => {
-    const result = `${name}${el ? `__${el}` : ''}`
+    let result = `${name}${el ? `__${el}` : ''}`
     if (mods) {
-      Object.keys(mods)
-        .filter((mod) => {
-          mods[mod]
-        })
-        .map((mod) => {
-          ;` ${result}--${mod}`
-        })
+      const mostStr = Object.keys(mods)
+        .filter((mod) => mods[mod])
+        .map((mod) => ` ${result}--${mod}`)
         .join('')
+      result += mostStr
     }
     return result
   }
