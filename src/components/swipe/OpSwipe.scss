@@ -18,7 +18,8 @@
   &__indicator {
     width: var(--van-swipe-indicator-size);
     height: var(--van-swipe-indicator-size);
-    margin-right: var(--van-swipe-indicator-size);
+    margin-right: 5px;
+    margin-bottom: 5px;
     border-radius: 100%;
     opacity: var(--van-swipe-indicator-inactive-opacity);
     background-color: var(--van-swipe-indicator-inactive-background);

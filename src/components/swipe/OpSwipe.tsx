@@ -73,7 +73,7 @@ export default defineComponent({
       const y = props.vertical ? 'right' : 'bottom'
       const style = {
         Position: 'absolute',
-
+        alignItems: 'flex-end',
         [x]: '50%',
         [y]: '10px',
         transform: `translate${props.vertical ? 'Y' : 'X'}(-50%)`,

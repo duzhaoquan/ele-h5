@@ -58,7 +58,7 @@ const onTabScroll = ({ isFixed }: { isFixed: boolean }) => {
             class="home-page__activity__swipe"
             :autoplay="3000"
             :loop="true"
-            :vertical="false"
+            :vertical="true"
             :forward="false"
           >
             <OpSwipeItem v-for="v in data.activities" :key="v">
